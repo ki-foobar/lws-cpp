@@ -273,15 +273,20 @@ int randomele(gentleman::random::Generator& gen)
 
     auto e = gen.rnd(11);
     const auto r = rarity[e];
-    for (int i = 0; i < r - 1; ++i)
+
+    if (r != 1)
     {
-        const auto e2 = gen.rnd(11);
-        const auto r2 = rarity[e2];
-        if (r2 < r)
+        static_cast<void>(gen.rnd(1)); // Advance RNG's state by 1 step.
+        for (int i = 0; i < r - 1; ++i)
         {
-            if (gen.rnd(2) == 0)
+            const auto e2 = gen.rnd(11);
+            const auto r2 = rarity[e2];
+            if (r2 < r)
             {
-                e = e2;
+                if (gen.rnd(2) == 0)
+                {
+                    e = e2;
+                }
             }
         }
     }

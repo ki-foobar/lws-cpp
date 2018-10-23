@@ -1,9 +1,9 @@
 #include <iomanip>
 #include <iostream>
-#include <thread>
 #include <mutex>
 
 #include "elona.hpp"
+#include "parallel.hpp"
 #include "randomtitlegenerator.hpp"
 
 
@@ -13,14 +13,25 @@
 
 // [begin, end)
 constexpr auto begin = 0;
-constexpr auto end = 1 * 10000 * 10000;
-constexpr auto seaching_type = 34;
-constexpr auto power_threshold = 545;
+constexpr auto end = 2 * 10000 * 10000;
+
+/*
+ * 20050: fire
+ * 20051: cold
+ * 20052: lightning
+ * 20053: darkness
+ * 20054: mind
+ * 20055: poison
+ * 20056: nether
+ * 20057: sound
+ * 20058: nerve
+ * 20059: chaos
+ * 20060: magic
+ */
 
 constexpr auto has_ehekatl_feat = true;
 constexpr auto hammer_enhancement = 0;
-constexpr auto weapon_type = WeaponType::melee;
-constexpr auto level = 1;
+constexpr auto weapon_type = WeaponType::ranged;
 
 
 
@@ -36,7 +47,7 @@ gentleman::elona::RandomTitleGenerator title_generator;
 
 std::mutex cout_mutex;
 
-void process_one_title(gentleman::random::Generator& gen, int weapon_seed)
+void process_one_title(gentleman::random::Generator& gen, int weapon_seed, int level)
 {
     const auto weapon_title = title_generator.generate(weapon_seed - 40000);
     gen.randomize(weapon_seed);
@@ -68,12 +79,20 @@ void process_one_title(gentleman::random::Generator& gen, int weapon_seed)
     }
 
     std::lock_guard<std::mutex> guard{cout_mutex};
-    std::cout << weapon_seed << "," << ((weapon_seed - 50500) / 17 + 1) << "," << weapon_title << "," << get_e_desc(type, power) << "," << power << "," << blood << std::endl;
+    std::cout
+        << level << "->" << (level + 1) << ","
+        << weapon_seed << ","
+        << ((weapon_seed - 50500) / 17 + 1) << ","
+        << weapon_title << ","
+        << get_e_desc(type, power) << ","
+        << power << ","
+        << blood
+        << std::endl;
 }
 
 
 
-bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int type, int threshold)
+bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int type, int threshold, int level)
 {
     for (int i = 0; i < 50; ++i)
     {
@@ -92,7 +111,7 @@ bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int t
                     continue;
                 }
             }
-            return e_type2 == type && e_power >= threshold;
+            return e_type2/10000 == 2 && e_power >= threshold;
         }
     }
 
@@ -101,22 +120,19 @@ bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int t
 
 
 
-uint32_t get_num_threads()
-{
-    return std::max(std::thread::hardware_concurrency(), 1U);
-}
-
-
-
-void search(gentleman::random::Generator& gen, int page)
+void search(gentleman::random::Generator& gen, int page, int searching_type, int power_threshold)
 {
     for (int i = 1; i < 17; ++i)
     {
         const auto weapon_seed = 50500 + page * 17 + i;
-        const auto match = match_enchantment(gen, weapon_seed, seaching_type, power_threshold);
+        const auto match = match_enchantment(gen, weapon_seed, searching_type, power_threshold, 1);
         if (match)
         {
-            process_one_title(gen, weapon_seed);
+            process_one_title(gen, weapon_seed, 1);
+            for (int i = 2; i <= 14; ++i)
+            {
+                process_one_title(gen, weapon_seed - (i - 1) * 10, i);
+            }
         }
     }
 }
@@ -134,34 +150,15 @@ int main()
     const auto page_begin = begin / 17;
     const auto page_end = end / 17;
 
-    const auto num_threads = get_num_threads();
-    const auto page_per_thread = std::max(1, (page_end - page_begin) / static_cast<int>(num_threads));
-
-    std::vector<std::thread> threads;
-
-    int b = page_begin;
-    for (; b < page_end - page_per_thread; b += page_per_thread)
+    gentleman::parallel::repeat_internal([=](size_t begin, size_t end)
     {
-        threads.emplace_back([=] {
-            gentleman::random::Generator gen;
-            for (int page = b; page < b + page_per_thread; ++page)
-            {
-                search(gen, page);
-            }
-        });
-    }
-    threads.emplace_back([=] {
         gentleman::random::Generator gen;
-        for (int page = b; page < page_end; ++page)
+        for (size_t i = begin; i < end; ++i)
         {
-            search(gen, page);
+            const auto page = i + page_begin;
+            search(gen, page, 0, 550);
         }
-    });
-
-    for (auto&& thread : threads)
-    {
-        thread.join();
-    }
+    }, page_end - page_begin);
 
     return 0;
 }
