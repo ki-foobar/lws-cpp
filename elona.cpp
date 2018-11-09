@@ -5,9 +5,9 @@
 #include "random.hpp"
 
 
+
 namespace
 {
-
 
 struct EncRef
 {
@@ -122,11 +122,8 @@ std::string skillname(int id)
 
 
 
-
 namespace hsprnd
 {
-
-
 
 void init_enclist_table()
 {
@@ -152,7 +149,6 @@ void init_enclist_table()
         }
     }
 }
-
 
 
 
@@ -313,6 +309,5 @@ int encadd(gentleman::random::Generator& gen, int e_type)
     default: return 0;
     }
 }
-
 
 }

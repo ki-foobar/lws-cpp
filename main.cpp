@@ -34,8 +34,6 @@ constexpr auto hammer_enhancement = 0;
 
 
 
-
-
 using namespace hsprnd;
 
 
@@ -43,9 +41,10 @@ gentleman::elona::RandomTitleGenerator title_generator;
 
 
 
-
 std::mutex cout_mutex;
 std::mutex title_generator_mutex;
+
+
 
 void process_one_title(gentleman::random::Generator& gen, int weapon_seed, int level, WeaponType weapon_type)
 {
@@ -108,7 +107,7 @@ bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int t
         const auto e_type2 = encadd(gen, e_type);
         if (e_type2 != 0)
         {
-            if (e_type2 == type)
+            if (e_type2 == 34)
             {
                 if (gen.rnd(3))
                 {
@@ -133,10 +132,6 @@ void search(gentleman::random::Generator& gen, int page, int searching_type, int
         if (match)
         {
             process_one_title(gen, weapon_seed, 1, weapon_type);
-            for (int i = 2; i <= 14; ++i)
-            {
-                process_one_title(gen, weapon_seed - (i - 1) * 10, i, weapon_type);
-            }
         }
     }
 }

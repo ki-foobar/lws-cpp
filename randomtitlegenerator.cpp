@@ -58,8 +58,8 @@ namespace elona
 
 void RandomTitleGenerator::initialize()
 {
-    word_table_cp932 = _load_word_table("ndata.csv");
-    word_table_utf8 = _load_word_table("ndata-utf8.csv");
+    word_table_cp932 = _load_word_table("data/ndata-cp932.csv");
+    word_table_utf8 = _load_word_table("data/ndata-utf8.csv");
 }
 
 
