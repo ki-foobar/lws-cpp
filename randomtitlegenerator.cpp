@@ -7,9 +7,7 @@
 namespace
 {
 
-
-
-std::vector<std::string> split_record(const std::string& line)
+std::vector<std::string> _split_record(const std::string& line)
 {
     std::vector<std::string> fields{15};
 
@@ -31,7 +29,7 @@ std::vector<std::string> split_record(const std::string& line)
 
 
 
-std::vector<std::vector<std::string>> load_word_table(const std::string& filename)
+std::vector<std::vector<std::string>> _load_word_table(const std::string& filename)
 {
     std::vector<std::vector<std::string>> word_table;
 
@@ -43,13 +41,11 @@ std::vector<std::vector<std::string>> load_word_table(const std::string& filenam
     std::string buf;
     while (std::getline(in, buf))
     {
-        word_table.push_back(split_record(buf));
+        word_table.push_back(_split_record(buf));
     }
 
     return word_table;
 }
-
-
 
 }
 
@@ -60,12 +56,10 @@ namespace gentleman
 namespace elona
 {
 
-
-
 void RandomTitleGenerator::initialize()
 {
-    word_table_cp932 = load_word_table("ndata.csv");
-    word_table_utf8 = load_word_table("ndata-utf8.csv");
+    word_table_cp932 = _load_word_table("ndata.csv");
+    word_table_utf8 = _load_word_table("ndata-utf8.csv");
 }
 
 
@@ -221,8 +215,6 @@ retry:
 
     return randn2_u;
 }
-
-
 
 }
 }

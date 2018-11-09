@@ -11,8 +11,6 @@ namespace gentleman
 namespace parallel
 {
 
-
-
 template <class F>
 void repeat_internal(F f, size_t n)
 {
@@ -60,8 +58,6 @@ void repeat(F f, size_t n)
         }
     }, n);
 }
-
-
 
 }
 }

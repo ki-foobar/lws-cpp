@@ -10,8 +10,6 @@ namespace gentleman
 namespace elona
 {
 
-
-
 class RandomTitleGenerator
 {
 public:
@@ -23,8 +21,6 @@ private:
     std::vector<std::vector<std::string>> word_table_cp932;
     std::vector<std::vector<std::string>> word_table_utf8;
 };
-
-
 
 }
 }

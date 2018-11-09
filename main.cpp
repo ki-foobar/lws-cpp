@@ -31,7 +31,6 @@ constexpr auto end = 2 * 10000 * 10000;
 
 constexpr auto has_ehekatl_feat = true;
 constexpr auto hammer_enhancement = 0;
-constexpr auto weapon_type = WeaponType::melee;
 
 
 
@@ -48,7 +47,7 @@ gentleman::elona::RandomTitleGenerator title_generator;
 std::mutex cout_mutex;
 std::mutex title_generator_mutex;
 
-void process_one_title(gentleman::random::Generator& gen, int weapon_seed, int level)
+void process_one_title(gentleman::random::Generator& gen, int weapon_seed, int level, WeaponType weapon_type)
 {
     std::string weapon_title;
     {
@@ -97,7 +96,7 @@ void process_one_title(gentleman::random::Generator& gen, int weapon_seed, int l
 
 
 
-bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int type, int threshold, int level)
+bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int type, int threshold, int level, WeaponType weapon_type)
 {
     for (int i = 0; i < 50; ++i)
     {
@@ -109,7 +108,7 @@ bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int t
         const auto e_type2 = encadd(gen, e_type);
         if (e_type2 != 0)
         {
-            if (e_type2 == 34)
+            if (e_type2 == type)
             {
                 if (gen.rnd(3))
                 {
@@ -125,18 +124,18 @@ bool match_enchantment(gentleman::random::Generator& gen, int weapon_seed, int t
 
 
 
-void search(gentleman::random::Generator& gen, int page, int searching_type, int power_threshold)
+void search(gentleman::random::Generator& gen, int page, int searching_type, int power_threshold, WeaponType weapon_type)
 {
     for (int i = 1; i < 17; ++i)
     {
         const auto weapon_seed = 50500 + page * 17 + i;
-        const auto match = match_enchantment(gen, weapon_seed, searching_type, power_threshold, 1);
+        const auto match = match_enchantment(gen, weapon_seed, searching_type, power_threshold, 1, weapon_type);
         if (match)
         {
-            process_one_title(gen, weapon_seed, 1);
+            process_one_title(gen, weapon_seed, 1, weapon_type);
             for (int i = 2; i <= 14; ++i)
             {
-                process_one_title(gen, weapon_seed - (i - 1) * 10, i);
+                process_one_title(gen, weapon_seed - (i - 1) * 10, i, weapon_type);
             }
         }
     }
@@ -161,7 +160,7 @@ int main()
         for (size_t i = begin; i < end; ++i)
         {
             const auto page = i + page_begin;
-            search(gen, page, 0, 550);
+            search(gen, page, 0, 550, WeaponType::melee);
         }
     }, page_end - page_begin);
 
