@@ -116,12 +116,11 @@ std::string skillname(int id)
     }
 }
 
-
 }
 
 
 
-namespace hsprnd
+namespace absolute_gentleman
 {
 
 void init_enclist_table()
@@ -151,7 +150,7 @@ void init_enclist_table()
 
 
 
-int randomenc(absolute_gentleman::random::Engine& engine, int e_level, WeaponType weapon_type)
+int randomenc(random::Engine& engine, int e_level, WeaponType weapon_type)
 {
     const auto& enclist = enclist_table[static_cast<size_t>(weapon_type)][e_level];
     const auto sum = enclist_sum[static_cast<size_t>(weapon_type)][e_level];
@@ -169,7 +168,7 @@ int randomenc(absolute_gentleman::random::Engine& engine, int e_level, WeaponTyp
 
 
 
-int randomencp(absolute_gentleman::random::Engine& engine, bool has_ehekatl_feat, int hammer_enhancement)
+int randomencp(random::Engine& engine, bool has_ehekatl_feat, int hammer_enhancement)
 {
     if (hammer_enhancement)
     {
@@ -250,7 +249,7 @@ std::string get_e_desc(int e_type, int e_power)
 
 
 
-int randomele(absolute_gentleman::random::Engine& engine)
+int randomele(random::Engine& engine)
 {
     const std::array<int, 11> rarity{{
         1,
@@ -291,7 +290,7 @@ int randomele(absolute_gentleman::random::Engine& engine)
 
 
 
-int encadd(absolute_gentleman::random::Engine& engine, int e_type)
+int encadd(random::Engine& engine, int e_type)
 {
     if (e_type >= 20 || e_type == 0)
     {

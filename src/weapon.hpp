@@ -5,7 +5,7 @@
 
 
 
-namespace absolutegentleman
+namespace absolute_gentleman
 {
 
 struct Weapon
@@ -28,3 +28,4 @@ struct Weapon
 };
 
 }
+

@@ -6,7 +6,7 @@
 
 
 
-namespace absolutegentleman
+namespace absolute_gentleman
 {
 
 template <class F>

@@ -7,7 +7,6 @@
 #include "random/title_generator.hpp"
 #include "weapon.hpp"
 
-using namespace absolutegentleman;
 using namespace absolute_gentleman;
 
 
@@ -17,10 +16,8 @@ constexpr auto hammer_enhancement = 0;
 
 
 
-using namespace hsprnd;
 
-
-absolute_gentleman::random::TitleGenerator title_generator;
+random::TitleGenerator title_generator;
 
 
 
@@ -56,7 +53,7 @@ public:
 
 
 private:
-    absolute_gentleman::random::Engine engine;
+    random::Engine engine;
 
 
 
