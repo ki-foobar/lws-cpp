@@ -1,6 +1,5 @@
 .DS_Store
 bin/
 tmp/
-lws-cs
 lws
-tmp.rb
+
