@@ -55,8 +55,8 @@ std::string skillname(int id)
     case 11: return u8"耐久";
     case 12: return u8"器用";
     case 13: return u8"感覚";
-    case 14: return u8"意思";
-    case 15: return u8"習得";
+    case 14: return u8"習得";
+    case 15: return u8"意思";
     case 16: return u8"魔力";
     case 17: return u8"魅力";
     case 18: return u8"速度";
