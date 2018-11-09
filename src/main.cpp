@@ -12,26 +12,6 @@ using namespace absolute_gentleman;
 
 
 
-// MODIFY HERE.
-
-// [begin, end)
-constexpr auto begin = 0;
-constexpr auto end = 2 * 10000 * 10000;
-
-/*
- * 20050: fire
- * 20051: cold
- * 20052: lightning
- * 20053: darkness
- * 20054: mind
- * 20055: poison
- * 20056: nether
- * 20057: sound
- * 20058: nerve
- * 20059: chaos
- * 20060: magic
- */
-
 constexpr auto has_ehekatl_feat = true;
 constexpr auto hammer_enhancement = 0;
 
@@ -56,7 +36,8 @@ public:
 
 
 
-    void search(int page, int searching_type, int power_threshold, WeaponType weapon_type)
+    template <typename F>
+    void search(int page, F match, WeaponType weapon_type)
     {
         constexpr auto weapon_level = 1;
 
@@ -64,7 +45,7 @@ public:
         {
             const auto weapon_seed = 50500 + page * 17 + i;
             const Weapon weapon{weapon_type, weapon_level, weapon_seed};
-            const auto matched = _match_enchantment(weapon, searching_type, power_threshold);
+            const auto matched = _match_enchantment(weapon, match);
             if (matched)
             {
                 _dump_added_enchantment_infomation(weapon);
@@ -79,7 +60,8 @@ private:
 
 
 
-    bool _match_enchantment(const Weapon& weapon, int type, int threshold)
+    template <typename F>
+    bool _match_enchantment(const Weapon& weapon, F match)
     {
         for (int i = 0; i < 50; ++i)
         {
@@ -98,7 +80,7 @@ private:
                         continue;
                     }
                 }
-                return e_type2 == type && e_power >= threshold;
+                return match(e_type2, e_power);
             }
         }
 
@@ -159,9 +141,15 @@ private:
 
 int main()
 {
-    constexpr auto t = 34;
-    constexpr auto p = 400;
+    constexpr auto begin = 0;
+    constexpr auto end = 1700;
     constexpr auto w = WeaponType::melee;
+
+
+    auto match = [](int, int)
+    {
+        return true;
+    };
 
 
     title_generator.initialize();
@@ -177,7 +165,7 @@ int main()
     {
         thread_local WeaponEnchantmentSearcher searcher;
         const auto page = i + page_begin;
-        searcher.search(page, t, p, w);
+        searcher.search(page, match, w);
     }, page_end - page_begin);
 
     return 0;
