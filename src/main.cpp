@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 
     init_enclist_table();
 
-    std::cout << "Id,Page,Name,Enc,Power,Blood" << std::endl;
+    std::cout << "Lvl,Id,Page,Enc,Power,Blood" << std::endl;
 
     const auto page_begin = begin / 17;
     const auto page_end = end / 17;
