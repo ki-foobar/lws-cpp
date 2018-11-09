@@ -31,7 +31,7 @@ constexpr auto end = 2 * 10000 * 10000;
 
 constexpr auto has_ehekatl_feat = true;
 constexpr auto hammer_enhancement = 0;
-constexpr auto weapon_type = WeaponType::ranged;
+constexpr auto weapon_type = WeaponType::melee;
 
 
 
@@ -46,10 +46,15 @@ gentleman::elona::RandomTitleGenerator title_generator;
 
 
 std::mutex cout_mutex;
+std::mutex title_generator_mutex;
 
 void process_one_title(gentleman::random::Generator& gen, int weapon_seed, int level)
 {
-    const auto weapon_title = title_generator.generate(weapon_seed - 40000);
+    std::string weapon_title;
+    {
+        std::lock_guard<std::mutex> guard{title_generator_mutex};
+        weapon_title = title_generator.generate(weapon_seed - 40000);
+    }
     gen.randomize(weapon_seed);
     const auto blood = 4 + gen.rnd(12);
 
