@@ -54,8 +54,6 @@ namespace gentleman
 namespace random
 {
 
-
-
 class Generator
 {
 public:
@@ -87,6 +85,13 @@ public:
 
 
 
+    Generator(const Generator&) = default;
+    Generator(Generator&&) = default;
+    Generator& operator=(const Generator&) = default;
+    Generator& operator=(Generator&&) = default;
+
+
+
 private:
     /* Period parameters */
     static constexpr int N = 624;
@@ -108,8 +113,6 @@ private:
     void next_state();
     double genrand_real2();
 };
-
-
 
 }
 }
