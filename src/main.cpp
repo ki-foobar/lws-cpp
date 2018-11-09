@@ -38,7 +38,7 @@ public:
     {
         constexpr auto weapon_level = 1;
 
-        for (int i = 1; i < 17; ++i)
+        for (int i = 0; i < 17; ++i)
         {
             const auto weapon_seed = 50500 + page * 17 + i;
             const Weapon weapon{weapon_type, weapon_level, weapon_seed};
@@ -92,7 +92,12 @@ private:
         {
             std::lock_guard<std::mutex> guard{title_generator_mutex};
             weapon_title = title_generator.generate(weapon.seed - 40000);
+            if (!weapon.is_selectable())
+            {
+                weapon_title += "(選択不可)";
+            }
         }
+
         engine.randomize(weapon.seed);
         const auto blood = 4 + engine.rnd(12);
 
@@ -136,16 +141,20 @@ private:
 
 
 
-int main()
+int main(int argc, char** argv)
 {
     constexpr auto begin = 0;
-    constexpr auto end = 1700;
-    constexpr auto w = WeaponType::melee;
+    constexpr auto end = 1 * 10000 * 10000;
+    auto w = WeaponType::melee;
 
-
-    auto match = [](int, int)
+    if (argc == 2 && argv[1] == std::string{"--ranged"})
     {
-        return true;
+        w = WeaponType::ranged;
+    }
+
+    auto match = [](int, int power)
+    {
+        return power == 550;
     };
 
 

@@ -5,11 +5,17 @@ BIN_DIR = bin
 PROGRAM = lws
 
 
-all: test
+all: melee ranged
 
 
-test: build
-	@./$(BIN_DIR)/$(PROGRAM)
+melee: build
+	@$(RM) -f melee.csv
+	@./$(BIN_DIR)/$(PROGRAM) > melee.csv
+
+
+ranged: build
+	@$(RM) -f ranged.csv
+	@./$(BIN_DIR)/$(PROGRAM) --ranged > ranged.csv
 
 
 build: $(BIN_DIR)
@@ -28,4 +34,4 @@ rebuild: clean build
 
 
 
-.PHONY: all test build clean rebuild
+.PHONY: all melee ranged test build clean rebuild

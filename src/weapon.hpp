@@ -22,8 +22,14 @@ struct Weapon
         , seed(seed)
     {
         assert(1 <= level);
-        assert(50501 <= seed);
-        assert((seed - 50500) % 17 != 0);
+        assert(50500 <= seed);
+    }
+
+
+
+    bool is_selectable() const
+    {
+        return (seed - 50500) % 17 != 0;
     }
 };
 
