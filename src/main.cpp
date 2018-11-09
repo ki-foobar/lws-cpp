@@ -4,10 +4,11 @@
 
 #include "elona.hpp"
 #include "parallel.hpp"
-#include "randomtitlegenerator.hpp"
+#include "random/title_generator.hpp"
 #include "weapon.hpp"
 
 using namespace absolutegentleman;
+using namespace absolute_gentleman;
 
 
 
@@ -39,7 +40,7 @@ constexpr auto hammer_enhancement = 0;
 using namespace hsprnd;
 
 
-gentleman::elona::RandomTitleGenerator title_generator;
+absolute_gentleman::random::TitleGenerator title_generator;
 
 
 
@@ -74,7 +75,7 @@ public:
 
 
 private:
-    gentleman::random::Generator gen;
+    absolute_gentleman::random::Engine engine;
 
 
 
@@ -83,16 +84,16 @@ private:
         for (int i = 0; i < 50; ++i)
         {
             const auto seed = weapon.seed + weapon.level * 10 + i;
-            gen.randomize(seed);
-            const auto e_level = gen.rnd(5);
-            const auto e_type = randomenc(gen, e_level, weapon.type);
-            const auto e_power = randomencp(gen, has_ehekatl_feat, hammer_enhancement);
-            const auto e_type2 = encadd(gen, e_type);
+            engine.randomize(seed);
+            const auto e_level = engine.rnd(5);
+            const auto e_type = randomenc(engine, e_level, weapon.type);
+            const auto e_power = randomencp(engine, has_ehekatl_feat, hammer_enhancement);
+            const auto e_type2 = encadd(engine, e_type);
             if (e_type2 != 0)
             {
                 if (e_type2 == 34)
                 {
-                    if (gen.rnd(3))
+                    if (engine.rnd(3))
                     {
                         continue;
                     }
@@ -113,24 +114,24 @@ private:
             std::lock_guard<std::mutex> guard{title_generator_mutex};
             weapon_title = title_generator.generate(weapon.seed - 40000);
         }
-        gen.randomize(weapon.seed);
-        const auto blood = 4 + gen.rnd(12);
+        engine.randomize(weapon.seed);
+        const auto blood = 4 + engine.rnd(12);
 
         int type{};
         int power{};
         for (int i = 0; i < 50; ++i)
         {
             const auto seed = weapon.seed + weapon.level * 10 + i;
-            gen.randomize(seed);
-            const auto e_level = gen.rnd(5);
-            const auto e_type = randomenc(gen, e_level, weapon.type);
-            const auto e_power = randomencp(gen, has_ehekatl_feat, hammer_enhancement);
-            const auto e_type2 = encadd(gen, e_type);
+            engine.randomize(seed);
+            const auto e_level = engine.rnd(5);
+            const auto e_type = randomenc(engine, e_level, weapon.type);
+            const auto e_power = randomencp(engine, has_ehekatl_feat, hammer_enhancement);
+            const auto e_type2 = encadd(engine, e_type);
             if (e_type2 != 0)
             {
                 if (e_type2 == 34)
                 {
-                    if (gen.rnd(3))
+                    if (engine.rnd(3))
                     {
                         continue;
                     }

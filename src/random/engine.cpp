@@ -41,26 +41,25 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#include "engine.hpp"
 
-#include "random.hpp"
 
 
 #define MIXBITS(u,v) ( ((u) & UMASK) | ((v) & LMASK) )
 #define TWIST(u,v) ((MIXBITS(u,v) >> 1) ^ ((v)&1UL ? MATRIX_A : 0UL))
 
 
-namespace gentleman
+
+namespace absolute_gentleman
 {
 namespace random
 {
-
-
 
 //MT関連の内部関数
 //MTのソースコードからEXRandで使ってるとこだけ抜粋
 
 /* initializes mt[N] with a seed */
-void Generator::init_genrand(unsigned long s)
+void Engine::init_genrand(unsigned long s)
 {
     int j;
     state[0] = s & 0xffffffffUL;
@@ -77,7 +76,7 @@ void Generator::init_genrand(unsigned long s)
 
 
 
-void Generator::next_state()
+void Engine::next_state()
 {
     unsigned long *p = state;
     int j;
@@ -101,7 +100,7 @@ void Generator::next_state()
 
 
 /* generates a random number on [0,1)-real-interval */
-double Generator::genrand_real2()
+double Engine::genrand_real2()
 {
     unsigned long y;
 
@@ -117,8 +116,6 @@ double Generator::genrand_real2()
     return (double)y * (1.0 / 4294967296.0);
     /* divided by 2^32 */
 }
-
-
 
 }
 }

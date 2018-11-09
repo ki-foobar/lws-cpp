@@ -1,43 +1,31 @@
-CXX = g++
-# CXX_FLAGS = -Wall -Wextra -g -O0 -MMD -DDEBUG -std=c++11
-CXX_FLAGS = -Wall -Wextra -O2 -MMD -std=c++11
+MKDIR = mkdir
+CMAKE = cmake
+
 BIN_DIR = bin
-SRC_DIR = .
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(foreach i, $(SOURCES), $(BIN_DIR)/$(basename $(i)).o)
-PROGRAM = ./lws
-
-
-.PHONY: test clean rebuild
+PROGRAM = lws
 
 
 all: test
 
 
 test: build
-	@echo ----- run -----
-	# @date +"%H:%M:%S"
-	@$(PROGRAM)
-	# @date +"%H:%M:%S"
+	@./$(BIN_DIR)/$(PROGRAM)
 
 
-build: $(PROGRAM)
+build: $(BIN_DIR)
+	@cd $(BIN_DIR); $(CMAKE) ..; $(MAKE)
 
 
-$(PROGRAM): $(OBJECTS)
-	$(CXX) $^ -pthread -o $@
-
-
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXX_FLAGS) -c $< -o $@
+$(BIN_DIR):
+	@$(MKDIR) $(BIN_DIR)
 
 
 clean:
-	-@$(RM) -f $(PROGRAM)
-	-@$(RM) -f $(BIN_DIR)/*.d $(BIN_DIR)/*.o
+	@$(RM) -rf $(BIN_DIR)
 
 
 rebuild: clean build
 
 
--include $(BIN_DIR)/*.d
+
+.PHONY: all test build clean rebuild

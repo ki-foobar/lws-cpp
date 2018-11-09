@@ -2,7 +2,6 @@
 #include <array>
 #include <iostream>
 #include <vector>
-#include "random.hpp"
 
 
 
@@ -152,12 +151,12 @@ void init_enclist_table()
 
 
 
-int randomenc(gentleman::random::Generator& gen, int e_level, WeaponType weapon_type)
+int randomenc(absolute_gentleman::random::Engine& engine, int e_level, WeaponType weapon_type)
 {
     const auto& enclist = enclist_table[static_cast<size_t>(weapon_type)][e_level];
     const auto sum = enclist_sum[static_cast<size_t>(weapon_type)][e_level];
 
-    const auto p = gen.rndex(sum);
+    const auto p = engine.rndex(sum);
     for (const auto& e : enclist)
     {
         if (p < e.second)
@@ -170,7 +169,7 @@ int randomenc(gentleman::random::Generator& gen, int e_level, WeaponType weapon_
 
 
 
-int randomencp(gentleman::random::Generator& gen, bool has_ehekatl_feat, int hammer_enhancement)
+int randomencp(absolute_gentleman::random::Engine& engine, bool has_ehekatl_feat, int hammer_enhancement)
 {
     if (hammer_enhancement)
     {
@@ -179,7 +178,7 @@ int randomencp(gentleman::random::Generator& gen, bool has_ehekatl_feat, int ham
     }
     else
     {
-        return gen.rnd(gen.rnd(500 + has_ehekatl_feat * 50) + 1) + 1;
+        return engine.rnd(engine.rnd(500 + has_ehekatl_feat * 50) + 1) + 1;
     }
 }
 
@@ -251,7 +250,7 @@ std::string get_e_desc(int e_type, int e_power)
 
 
 
-int randomele(gentleman::random::Generator& gen)
+int randomele(absolute_gentleman::random::Engine& engine)
 {
     const std::array<int, 11> rarity{{
         1,
@@ -267,19 +266,19 @@ int randomele(gentleman::random::Generator& gen)
         5,
     }};
 
-    auto e = gen.rnd(11);
+    auto e = engine.rnd(11);
     const auto r = rarity[e];
 
     if (r != 1)
     {
-        static_cast<void>(gen.rnd(1)); // Advance RNG's state by 1 step.
+        static_cast<void>(engine.rnd(1)); // Advance RNG's state by 1 step.
         for (int i = 0; i < r - 1; ++i)
         {
-            const auto e2 = gen.rnd(11);
+            const auto e2 = engine.rnd(11);
             const auto r2 = rarity[e2];
             if (r2 < r)
             {
-                if (gen.rnd(2) == 0)
+                if (engine.rnd(2) == 0)
                 {
                     e = e2;
                 }
@@ -292,7 +291,7 @@ int randomele(gentleman::random::Generator& gen)
 
 
 
-int encadd(gentleman::random::Generator& gen, int e_type)
+int encadd(absolute_gentleman::random::Engine& engine, int e_type)
 {
     if (e_type >= 20 || e_type == 0)
     {
@@ -301,11 +300,11 @@ int encadd(gentleman::random::Generator& gen, int e_type)
 
     switch (e_type)
     {
-    case 1: return 10000 + gen.rnd(10) + 10;
-    case 2: return 20000 + randomele(gen);
-    case 3: return 30000 + gen.rnd(40) + 150;
-    case 6: return 60000 + gen.rnd(10) + 10;
-    case 7: return 70000 + randomele(gen);
+    case 1: return 10000 + engine.rnd(10) + 10;
+    case 2: return 20000 + randomele(engine);
+    case 3: return 30000 + engine.rnd(40) + 150;
+    case 6: return 60000 + engine.rnd(10) + 10;
+    case 7: return 70000 + randomele(engine);
     default: return 0;
     }
 }

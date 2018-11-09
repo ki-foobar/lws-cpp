@@ -2,16 +2,16 @@
 
 #include <string>
 #include <vector>
-#include "random.hpp"
+#include "engine.hpp"
 
 
 
-namespace gentleman
+namespace absolute_gentleman
 {
-namespace elona
+namespace random
 {
 
-class RandomTitleGenerator
+class TitleGenerator
 {
 public:
     void initialize();
@@ -21,7 +21,7 @@ public:
 private:
     std::vector<std::vector<std::string>> word_table_cp932;
     std::vector<std::vector<std::string>> word_table_utf8;
-    gentleman::random::Generator gen;
+    Engine engine;
 };
 
 }

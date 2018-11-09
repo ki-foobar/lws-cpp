@@ -47,19 +47,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
-namespace gentleman
+namespace absolute_gentleman
 {
 namespace random
 {
 
-class Generator
+class Engine
 {
 public:
-    Generator(int32_t seed = 0)
+    Engine(int32_t seed = 0)
         : linear_seed(static_cast<int64_t>(seed))
     {
         init_genrand(static_cast<uint64_t>(seed));
     }
+
 
 
     int32_t rnd(int32_t max)
@@ -69,10 +70,12 @@ public:
     }
 
 
+
     int32_t rndex(int32_t max)
     {
         return static_cast<int32_t>(genrand_real2() * max);
     }
+
 
 
     void randomize(int32_t new_seed)
@@ -83,10 +86,10 @@ public:
 
 
 
-    Generator(const Generator&) = default;
-    Generator(Generator&&) = default;
-    Generator& operator=(const Generator&) = default;
-    Generator& operator=(Generator&&) = default;
+    Engine(const Engine&) = default;
+    Engine(Engine&&) = default;
+    Engine& operator=(const Engine&) = default;
+    Engine& operator=(Engine&&) = default;
 
 
 

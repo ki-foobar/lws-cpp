@@ -1,4 +1,4 @@
-#include "randomtitlegenerator.hpp"
+#include "title_generator.hpp"
 #include <fstream>
 
 
@@ -50,12 +50,12 @@ std::vector<std::vector<std::string>> _load_word_table(const std::string& filena
 
 
 
-namespace gentleman
+namespace absolute_gentleman
 {
-namespace elona
+namespace random
 {
 
-void RandomTitleGenerator::initialize()
+void TitleGenerator::initialize()
 {
     word_table_cp932 = _load_word_table("data/ndata-cp932.csv");
     word_table_utf8 = _load_word_table("data/ndata-utf8.csv");
@@ -63,9 +63,9 @@ void RandomTitleGenerator::initialize()
 
 
 
-std::string RandomTitleGenerator::generate(int seed)
+std::string TitleGenerator::generate(int seed)
 {
-    gen.randomize(seed);
+    engine.randomize(seed);
 
     // "具"
     const auto category_concrete = std::string{
@@ -115,8 +115,8 @@ std::string RandomTitleGenerator::generate(int seed)
 retry:
     while (true)
     {
-        p_2 = gen.rnd(static_cast<int>(word_table_cp932.size()));
-        p_1 = gen.rnd(14);
+        p_2 = engine.rnd(static_cast<int>(word_table_cp932.size()));
+        p_1 = engine.rnd(14);
         if (!word_table_cp932[p_2][p_1].empty())
         {
             break;
@@ -133,17 +133,17 @@ retry:
     {
         if (p_1 == 10 || p_1 == 11)
         {
-            if (gen.rnd(5) == 0)
+            if (engine.rnd(5) == 0)
             {
                 p_1 = 0;
-                if (gen.rnd(2) == 0)
+                if (engine.rnd(2) == 0)
                 {
                     randn2_ += no;
                     randn2_u += "の";
                 }
                 break;
             }
-            switch (gen.rnd(5))
+            switch (engine.rnd(5))
             {
             case 0:
                 randn2_ += of;
@@ -163,7 +163,7 @@ retry:
         {
             randn2_ += no;
             randn2_u += "の";
-            if (gen.rnd(10) == 0)
+            if (engine.rnd(10) == 0)
             {
                 p_1 = 10;
             }
@@ -173,7 +173,7 @@ retry:
     bool ok{};
     for (int i = 0; i < 100; ++i)
     {
-        p_4 = gen.rnd(static_cast<int>(word_table_cp932.size()));
+        p_4 = engine.rnd(static_cast<int>(word_table_cp932.size()));
         if (p_4 == p_2)
         {
             continue;
@@ -187,11 +187,11 @@ retry:
         }
         if (p_1 < 10)
         {
-            p_1 = gen.rnd(2);
+            p_1 = engine.rnd(2);
         }
         else
         {
-            p_1 = 10 + gen.rnd(2);
+            p_1 = 10 + engine.rnd(2);
         }
         if (word_table_cp932[p_4][p_1].empty())
         {
