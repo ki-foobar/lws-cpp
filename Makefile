@@ -16,9 +16,9 @@ all: test
 
 test: build
 	@echo ----- run -----
-	@date +"%H:%M:%S"
+	# @date +"%H:%M:%S"
 	@$(PROGRAM)
-	@date +"%H:%M:%S"
+	# @date +"%H:%M:%S"
 
 
 build: $(PROGRAM)

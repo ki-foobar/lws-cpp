@@ -6,21 +6,19 @@
 
 
 
-namespace gentleman
-{
-namespace parallel
+namespace absolutegentleman
 {
 
 template <class F>
-void repeat_internal(F f, size_t n)
+void repeat_parallel(F f, size_t n)
 {
     if (n == 0)
     {
         return;
     }
 
-    const size_t num_threads = std::max(std::thread::hardware_concurrency(), 1U);
-    const size_t step = std::max(1LU, n / num_threads);
+    const auto num_threads = std::max(std::thread::hardware_concurrency(), 1U);
+    const auto step = std::max(1LU, n / num_threads);
 
     std::vector<std::thread> threads;
 
@@ -30,13 +28,19 @@ void repeat_internal(F f, size_t n)
     {
         threads.emplace_back([=, &f]()
         {
-            f(i, i + step);
+            for (size_t k = i; k < i + step; ++k)
+            {
+                f(k);
+            }
         });
     }
 
     threads.emplace_back([=, &f]()
     {
-        f(i, n);
+        for (size_t k = i; k < n; ++k)
+        {
+            f(k);
+        }
     });
 
     for (auto&& thread : threads)
@@ -45,19 +49,4 @@ void repeat_internal(F f, size_t n)
     }
 }
 
-
-
-template <class F>
-void repeat(F f, size_t n)
-{
-    repeat_internal([&f](size_t begin, size_t end)
-    {
-        for (size_t i = begin; i < end; ++i)
-        {
-            f(i);
-        }
-    }, n);
-}
-
-}
 }

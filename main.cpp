@@ -48,13 +48,10 @@ std::mutex title_generator_mutex;
 
 
 
-class WeaponTitleSearcher
+class WeaponEnchantmentSearcher
 {
 public:
-    WeaponTitleSearcher(gentleman::random::Generator& gen)
-        : gen(gen)
-    {
-    }
+    WeaponEnchantmentSearcher() = default;
 
 
 
@@ -161,6 +158,11 @@ private:
 
 int main()
 {
+    constexpr auto t = 34;
+    constexpr auto p = 400;
+    constexpr auto w = WeaponType::melee;
+
+
     title_generator.initialize();
 
     init_enclist_table();
@@ -170,15 +172,11 @@ int main()
     const auto page_begin = begin / 17;
     const auto page_end = end / 17;
 
-    gentleman::parallel::repeat_internal([=](size_t begin, size_t end)
+    repeat_parallel([=](size_t i)
     {
-        gentleman::random::Generator gen;
-        WeaponTitleSearcher searcher{gen};
-        for (size_t i = begin; i < end; ++i)
-        {
-            const auto page = i + page_begin;
-            searcher.search(page, 34, 400, WeaponType::melee);
-        }
+        thread_local WeaponEnchantmentSearcher searcher;
+        const auto page = i + page_begin;
+        searcher.search(page, t, p, w);
     }, page_end - page_begin);
 
     return 0;

@@ -1,6 +1,5 @@
 #include "randomtitlegenerator.hpp"
 #include <fstream>
-#include "random.hpp"
 
 
 
@@ -64,9 +63,9 @@ void RandomTitleGenerator::initialize()
 
 
 
-std::string RandomTitleGenerator::generate(int seed) const
+std::string RandomTitleGenerator::generate(int seed)
 {
-    gentleman::random::Generator gen{seed};
+    gen.randomize(seed);
 
     // "具"
     const auto category_concrete = std::string{
