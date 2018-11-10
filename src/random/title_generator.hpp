@@ -14,13 +14,14 @@ namespace random
 class TitleGenerator
 {
 public:
-    void initialize();
+    static void initialize();
 
     std::string generate(int seed);
 
 private:
-    std::vector<std::vector<std::string>> word_table_cp932;
-    std::vector<std::vector<std::string>> word_table_utf8;
+    static std::vector<std::vector<std::string>> word_table_cp932;
+    static std::vector<std::vector<std::string>> word_table_utf8;
+
     Engine engine;
 };
 

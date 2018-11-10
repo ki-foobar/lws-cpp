@@ -14,9 +14,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O2")
 add_executable(${PROJECT_NAME}
     src/main.cpp
     src/elona.cpp
-    src/main.cpp
+    src/enchantment.cpp
     src/random/engine.cpp
     src/random/title_generator.cpp
+    src/weapon_enchantment_searcher.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} pthread)

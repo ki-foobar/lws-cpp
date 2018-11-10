@@ -55,6 +55,11 @@ namespace absolute_gentleman
 namespace random
 {
 
+std::vector<std::vector<std::string>> TitleGenerator::word_table_cp932;
+std::vector<std::vector<std::string>> TitleGenerator::word_table_utf8;
+
+
+
 void TitleGenerator::initialize()
 {
     word_table_cp932 = _load_word_table("data/ndata-cp932.csv");
